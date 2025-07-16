@@ -9,7 +9,11 @@ export const CartContent: React.FC = ({}) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
-  const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+  const cart =
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("cart") || "[]")
+      : [];
+
   const itemCount = cart.length;
 
   const handleBack = () => {
