@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import type { Game } from "../types/game";
 
 interface GameCardProps {
@@ -21,9 +22,11 @@ export const GameCard: React.FC<GameCardProps> = ({
           New
         </span>
       )}
-      <img
+      <Image
         src={game.image}
         alt={game.name}
+        width={400}
+        height={160}
         className="w-full h-40 object-cover rounded mb-4"
       />
       <div className="text-xs text-gray-500 mb-1">GENRE</div>

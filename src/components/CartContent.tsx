@@ -1,0 +1,55 @@
+import React, { Suspense } from "react";
+import Link from "next/link";
+import { OrderSummary } from "./OrderSummary";
+import { CartInteractions } from "./CartInteractions";
+import { CartItem as CartItemType } from "../actions/cart";
+import { LoadingIndicator } from "./LoadingIndicator";
+
+interface CartContentProps {
+  cart: CartItemType[];
+  total: number;
+  itemCount: number;
+}
+
+export const CartContent: React.FC<CartContentProps> = ({
+  cart,
+  total,
+  itemCount,
+}) => {
+  return (
+    <>
+      <Link
+        href="/"
+        className="mb-6 flex items-center gap-2 text-gray-700 hover:underline text-sm"
+      >
+        <span className="text-lg">&larr;</span> Back to Catalog
+      </Link>
+      <h1 className="text-2xl font-bold mb-2">Your Cart</h1>
+      <div className="text-gray-500 mb-6">
+        {itemCount} item{itemCount !== 1 ? "s" : ""}
+      </div>
+      <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex-1">
+          {cart.length === 0 ? (
+            <div className="text-gray-400 text-center py-16">
+              Your cart is empty.
+            </div>
+          ) : (
+            <Suspense fallback={<LoadingIndicator />}>
+              <CartInteractions cart={cart} />
+            </Suspense>
+          )}
+        </div>
+        <div className="lg:w-[340px] w-full">
+          <OrderSummary games={cart} />
+          <button
+            className="mt-6 w-full py-3 rounded bg-gray-700 text-white font-semibold text-lg disabled:opacity-50"
+            disabled={cart.length === 0}
+          >
+            Checkout
+          </button>
+        </div>
+      </div>
+    </>
+  );
+};
