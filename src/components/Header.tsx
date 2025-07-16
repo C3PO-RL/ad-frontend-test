@@ -1,9 +1,10 @@
+"use client";
 import React from "react";
 import Link from "next/link";
-import { getCart } from "../actions/cart";
 
-export const Header: React.FC = async () => {
-  const { itemCount } = await getCart();
+export const Header: React.FC = () => {
+  const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+  const itemCount = cart.length;
 
   return (
     <header className="w-full bg-gray-100 py-4 px-6 flex items-center justify-between border-b">

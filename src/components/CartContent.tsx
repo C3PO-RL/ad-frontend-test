@@ -1,22 +1,17 @@
 "use client";
-import React, { Suspense, useTransition } from "react";
+import React, { Suspense, useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { OrderSummary } from "./OrderSummary";
 import { CartInteractions } from "./CartInteractions";
 import { CartItem as CartItemType } from "../actions/cart";
 import { LoadingIndicator } from "./LoadingIndicator";
 
-interface CartContentProps {
-  cart: CartItemType[];
-  itemCount: number;
-}
-
-export const CartContent: React.FC<CartContentProps> = ({
-  cart,
-  itemCount,
-}) => {
+export const CartContent: React.FC = ({}) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+
+  const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+  const itemCount = cart.length;
 
   const handleBack = () => {
     startTransition(() => {
