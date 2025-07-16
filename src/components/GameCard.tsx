@@ -38,19 +38,21 @@ export const GameCard: React.FC<GameCardProps> = ({ game, inCart }) => {
   };
 
   return (
-    <div className="border rounded-lg p-4 flex flex-col shadow-sm bg-white relative">
-      {game.isNew && (
-        <span className="absolute top-2 left-2 bg-blue-500 text-white text-xs px-2 py-1 rounded">
-          New
-        </span>
-      )}
-      <Image
-        src={game.image}
-        alt={game.name}
-        width={400}
-        height={160}
-        className="w-full h-40 object-cover rounded mb-4"
-      />
+    <div className="border rounded-lg p-4 flex flex-col shadow-sm bg-white">
+      <div className="relative mb-4">
+        {game.isNew && (
+          <span className="absolute top-2 left-2 bg-white text-gray-700 text-xs font-semibold px-3 py-1 rounded shadow z-10">
+            New
+          </span>
+        )}
+        <Image
+          src={game.image}
+          alt={game.name}
+          width={400}
+          height={160}
+          className="w-full h-40 object-cover rounded"
+        />
+      </div>
       <div className="text-xs text-gray-500 mb-1">GENRE</div>
       <div className="font-semibold text-sm mb-1">{game.genre}</div>
       <div className="font-bold text-lg mb-1">{game.name}</div>
