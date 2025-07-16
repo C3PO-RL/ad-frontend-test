@@ -1,15 +1,17 @@
+"use client";
+
 import React from "react";
 
 interface GenreFilterProps {
   genres: string[];
   selected: string;
-  onChange: (genre: string) => void;
+  handleGenreChange: (newGenre: string) => void;
 }
 
 export const GenreFilter: React.FC<GenreFilterProps> = ({
   genres,
   selected,
-  onChange,
+  handleGenreChange,
 }) => {
   return (
     <div className="flex items-center gap-2">
@@ -20,7 +22,7 @@ export const GenreFilter: React.FC<GenreFilterProps> = ({
         id="genre-select"
         className="border rounded px-3 py-2 text-sm"
         value={selected}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => handleGenreChange(e.target.value)}
       >
         <option value="">All</option>
         {genres.map((genre) => (

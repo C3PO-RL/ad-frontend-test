@@ -1,31 +1,59 @@
-import React from "react";
+"use client";
+import React, { useTransition } from "react";
+import Image from "next/image";
 import type { Game } from "../types/game";
+import { useRouter } from "next/navigation";
+import { addToCart, removeFromCart } from "../actions/cart";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 interface GameCardProps {
   game: Game;
   inCart: boolean;
-  onAddToCart: (game: Game) => void;
-  onRemoveFromCart: (gameId: string) => void;
 }
 
-export const GameCard: React.FC<GameCardProps> = ({
-  game,
-  inCart,
-  onAddToCart,
-  onRemoveFromCart,
-}) => {
+export const GameCard: React.FC<GameCardProps> = ({ game, inCart }) => {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  const { getItem, setItem } = useLocalStorage<Game[]>("cart");
+
+  const handleAddToCart = (game: Game) => {
+    startTransition(async () => {
+      // Update localStorage
+      const currentCart = getItem() || [];
+      setItem([...currentCart, game]);
+      // Server action
+      await addToCart(game);
+      router.refresh();
+    });
+  };
+
+  const handleRemoveFromCart = (gameId: string) => {
+    startTransition(async () => {
+      // Update localStorage
+      const currentCart = getItem() || [];
+      setItem(currentCart.filter((g) => g.id !== gameId));
+      // Server action
+      await removeFromCart(gameId);
+      router.refresh();
+    });
+  };
+
   return (
-    <div className="border rounded-lg p-4 flex flex-col shadow-sm bg-white relative">
-      {game.isNew && (
-        <span className="absolute top-2 left-2 bg-blue-500 text-white text-xs px-2 py-1 rounded">
-          New
-        </span>
-      )}
-      <img
-        src={game.image}
-        alt={game.name}
-        className="w-full h-40 object-cover rounded mb-4"
-      />
+    <div className="border rounded-xl p-4 flex flex-col shadow-sm bg-white">
+      <div className="relative mb-4">
+        {game.isNew && (
+          <span className="absolute top-2 left-2 bg-white text-gray-700 text-xs font-semibold px-3 py-1 rounded shadow z-10">
+            New
+          </span>
+        )}
+        <Image
+          src={game.image}
+          alt={game.name}
+          width={400}
+          height={160}
+          className="w-full h-40 object-cover rounded-t-xl"
+        />
+      </div>
       <div className="text-xs text-gray-500 mb-1">GENRE</div>
       <div className="font-semibold text-sm mb-1">{game.genre}</div>
       <div className="font-bold text-lg mb-1">{game.name}</div>
@@ -40,10 +68,13 @@ export const GameCard: React.FC<GameCardProps> = ({
           inCart
             ? "bg-gray-200 text-gray-700 border-gray-400"
             : "bg-white text-black border-black hover:bg-gray-100"
-        }`}
-        onClick={() => (inCart ? onRemoveFromCart(game.id) : onAddToCart(game))}
+        } ${isPending ? "opacity-50 cursor-not-allowed" : ""}`}
+        onClick={() =>
+          inCart ? handleRemoveFromCart(game.id) : handleAddToCart(game)
+        }
+        disabled={isPending}
       >
-        {inCart ? "Remove" : "Add to Cart"}
+        {isPending ? "Loading..." : inCart ? "Remove" : "Add to Cart"}
       </button>
     </div>
   );

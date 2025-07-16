@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import type { Game } from "../types/game";
 
 interface CartItemProps {
@@ -9,9 +10,11 @@ interface CartItemProps {
 export const CartItem: React.FC<CartItemProps> = ({ game, onRemove }) => {
   return (
     <div className="flex items-center gap-4 py-4 border-b last:border-b-0 relative">
-      <img
+      <Image
         src={game.image}
         alt={game.name}
+        width={112}
+        height={80}
         className="w-28 h-20 object-cover rounded"
       />
       <div className="flex-1">
