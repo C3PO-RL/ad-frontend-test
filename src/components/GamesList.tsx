@@ -1,10 +1,8 @@
 "use client";
 
-import React, { useTransition, useState } from "react";
-import { useRouter } from "next/navigation";
+import React from "react";
 import { GameCard } from "./GameCard";
 import { Game } from "../types/game";
-import { addToCart, removeFromCart } from "../actions/cart";
 
 interface GamesListProps {
   games: Game[];

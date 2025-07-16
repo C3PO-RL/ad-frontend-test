@@ -15,6 +15,22 @@ export const CartInteractions: React.FC<CartInteractionsProps> = ({ cart }) => {
   const router = useRouter();
   const { getItem, setItem } = useLocalStorage<CartItemType[]>("cart");
 
+  // Fallback: if cart is empty or undefined, use localStorage
+  let displayCart = cart && cart.length > 0 ? cart : [];
+  if (displayCart.length === 0) {
+    const localCart = getItem() || [];
+
+    displayCart = localCart.map((item: any) => ({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      image: item.image,
+      genre: item.genre,
+      description: item.description,
+      isNew: item.isNew,
+    }));
+  }
+
   const handleRemove = async (gameId: string) => {
     // Update localStorage
     const currentCart = getItem() || [];
@@ -26,7 +42,7 @@ export const CartInteractions: React.FC<CartInteractionsProps> = ({ cart }) => {
 
   return (
     <>
-      {cart.map((item) => (
+      {displayCart.map((item) => (
         <CartItem key={item.id} game={item} onRemove={handleRemove} />
       ))}
     </>

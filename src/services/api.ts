@@ -1,6 +1,6 @@
 import type { Game } from "../types/game";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "/api";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export interface FetchGamesParams {
   genre?: string;

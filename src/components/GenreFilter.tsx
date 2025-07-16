@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useTransition } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import React from "react";
 
 interface GenreFilterProps {
   genres: string[];

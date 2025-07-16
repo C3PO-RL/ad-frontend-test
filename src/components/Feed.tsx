@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useTransition, Suspense } from "react";
+import React, { useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { GenreFilter } from "./GenreFilter";
 import { GamesList } from "./GamesList";
