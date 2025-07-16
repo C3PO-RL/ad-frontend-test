@@ -6,29 +6,17 @@ import { useRouter, useSearchParams } from "next/navigation";
 interface GenreFilterProps {
   genres: string[];
   selected: string;
+  handleGenreChange: (newGenre: string) => void;
 }
 
 export const GenreFilter: React.FC<GenreFilterProps> = ({
   genres,
   selected,
+  handleGenreChange,
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
-
-  const handleGenreChange = (newGenre: string) => {
-    startTransition(() => {
-      const params = new URLSearchParams(searchParams.toString());
-      if (newGenre) {
-        params.set("genre", newGenre);
-        params.set("page", "1");
-      } else {
-        params.delete("genre");
-        params.set("page", "1");
-      }
-      router.push(`/?${params.toString()}`);
-    });
-  };
 
   return (
     <div className="flex items-center gap-2">
@@ -49,7 +37,6 @@ export const GenreFilter: React.FC<GenreFilterProps> = ({
           </option>
         ))}
       </select>
-      {isPending && <div className="text-sm text-gray-500">Loading...</div>}
     </div>
   );
 };

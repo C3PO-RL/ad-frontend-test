@@ -33,7 +33,6 @@ interface FeedProps {
   games: Game[];
   total: number;
   currentPage: number;
-  loading: boolean;
   cartItems: string[];
 }
 
@@ -41,7 +40,6 @@ export const Feed: React.FC<FeedProps> = ({
   games,
   total,
   currentPage,
-  loading,
   cartItems,
 }) => {
   const router = useRouter();
@@ -58,42 +56,40 @@ export const Feed: React.FC<FeedProps> = ({
       router.push(`/?${params.toString()}`);
     });
   };
+  const handleGenreChange = (newGenre: string) => {
+    startTransition(() => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (newGenre) {
+        params.set("genre", newGenre);
+        params.set("page", "1");
+      } else {
+        params.delete("genre");
+        params.set("page", "1");
+      }
+      router.push(`/?${params.toString()}`);
+    });
+  };
 
   return (
     <>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
         <h1 className="text-2xl font-bold">Top Sellers</h1>
-        <Suspense
-          fallback={
-            <div className="flex items-center gap-2">
-              <label htmlFor="genre-select" className="font-semibold">
-                Genre
-              </label>
-              <select
-                id="genre-select"
-                className="border rounded px-3 py-2 text-sm"
-                disabled
-              >
-                <option>Loading...</option>
-              </select>
-            </div>
-          }
-        >
-          <GenreFilter genres={GENRES} selected={genre} />
-        </Suspense>
+        <GenreFilter
+          genres={GENRES}
+          selected={genre}
+          handleGenreChange={handleGenreChange}
+        />
       </div>
-      {loading || isPending ? (
+      {isPending ? (
         <LoadingIndicator />
       ) : (
-        <Suspense fallback={<LoadingIndicator />}>
-          <GamesList
-            games={games}
-            total={total}
-            currentPage={currentPage}
-            onSeeMore={handleSeeMore}
-            cartItems={cartItems}
-          />
-        </Suspense>
+        <GamesList
+          games={games}
+          total={total}
+          currentPage={currentPage}
+          onSeeMore={handleSeeMore}
+          cartItems={cartItems}
+        />
       )}
     </>
   );

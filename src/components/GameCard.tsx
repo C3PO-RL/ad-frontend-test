@@ -1,20 +1,33 @@
-import React from "react";
+import React, { useTransition } from "react";
 import Image from "next/image";
 import type { Game } from "../types/game";
+import { useRouter } from "next/navigation";
+import { addToCart, removeFromCart } from "../actions/cart";
 
 interface GameCardProps {
   game: Game;
   inCart: boolean;
-  onAddToCart: (game: Game) => void;
-  onRemoveFromCart: (gameId: string) => void;
 }
 
-export const GameCard: React.FC<GameCardProps> = ({
-  game,
-  inCart,
-  onAddToCart,
-  onRemoveFromCart,
-}) => {
+export const GameCard: React.FC<GameCardProps> = ({ game, inCart }) => {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
+  const handleAddToCart = (game: Game) => {
+    startTransition(async () => {
+      await addToCart(game);
+
+      router.refresh();
+    });
+  };
+
+  const handleRemoveFromCart = (gameId: string) => {
+    startTransition(async () => {
+      await removeFromCart(gameId);
+
+      router.refresh();
+    });
+  };
   return (
     <div className="border rounded-lg p-4 flex flex-col shadow-sm bg-white relative">
       {game.isNew && (
@@ -43,10 +56,13 @@ export const GameCard: React.FC<GameCardProps> = ({
           inCart
             ? "bg-gray-200 text-gray-700 border-gray-400"
             : "bg-white text-black border-black hover:bg-gray-100"
-        }`}
-        onClick={() => (inCart ? onRemoveFromCart(game.id) : onAddToCart(game))}
+        } ${isPending ? "opacity-50 cursor-not-allowed" : ""}`}
+        onClick={() =>
+          inCart ? handleRemoveFromCart(game.id) : handleAddToCart(game)
+        }
+        disabled={isPending}
       >
-        {inCart ? "Remove" : "Add to Cart"}
+        {isPending ? "Loading..." : inCart ? "Remove" : "Add to Cart"}
       </button>
     </div>
   );

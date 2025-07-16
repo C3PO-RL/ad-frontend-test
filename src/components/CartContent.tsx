@@ -7,13 +7,11 @@ import { LoadingIndicator } from "./LoadingIndicator";
 
 interface CartContentProps {
   cart: CartItemType[];
-  total: number;
   itemCount: number;
 }
 
 export const CartContent: React.FC<CartContentProps> = ({
   cart,
-  total,
   itemCount,
 }) => {
   return (

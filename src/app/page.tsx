@@ -1,7 +1,8 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Feed } from "../components/Feed";
 import { fetchGames } from "../actions/games";
 import { getCart } from "../actions/cart";
+import Loading from "./loading";
 
 export default async function Page({
   searchParams,
@@ -28,13 +29,14 @@ export default async function Page({
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4 py-8">
-      <Feed
-        games={games}
-        total={total}
-        currentPage={currentPage}
-        loading={false}
-        cartItems={cartItemIds}
-      />
+      <Suspense fallback={<Loading />}>
+        <Feed
+          games={games}
+          total={total}
+          currentPage={currentPage}
+          cartItems={cartItemIds}
+        />
+      </Suspense>
     </div>
   );
 }

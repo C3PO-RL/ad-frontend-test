@@ -1,10 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useTransition, useState } from "react";
 import { useRouter } from "next/navigation";
 import { GameCard } from "./GameCard";
 import { Game } from "../types/game";
-import { addToCart, removeFromCart, getCart } from "../actions/cart";
+import { addToCart, removeFromCart } from "../actions/cart";
 
 interface GamesListProps {
   games: Game[];
@@ -21,31 +21,13 @@ export const GamesList: React.FC<GamesListProps> = ({
   onSeeMore,
   cartItems,
 }) => {
-  const router = useRouter();
-
-  const handleAddToCart = async (game: Game) => {
-    await addToCart(game);
-    router.refresh();
-  };
-
-  const handleRemoveFromCart = async (gameId: string) => {
-    await removeFromCart(gameId);
-    router.refresh();
-  };
-
   const isInCart = (gameId: string) => cartItems.includes(gameId);
 
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {games.map((game) => (
-          <GameCard
-            key={game.id}
-            game={game}
-            inCart={isInCart(game.id)}
-            onAddToCart={handleAddToCart}
-            onRemoveFromCart={handleRemoveFromCart}
-          />
+          <GameCard key={game.id} game={game} inCart={isInCart(game.id)} />
         ))}
       </div>
       {games.length < total && (
