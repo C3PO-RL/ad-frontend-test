@@ -3,6 +3,7 @@ import Image from "next/image";
 import type { Game } from "../types/game";
 import { useRouter } from "next/navigation";
 import { addToCart, removeFromCart } from "../actions/cart";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 interface GameCardProps {
   game: Game;
@@ -12,22 +13,30 @@ interface GameCardProps {
 export const GameCard: React.FC<GameCardProps> = ({ game, inCart }) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const { getItem, setItem } = useLocalStorage<Game[]>("cart");
 
   const handleAddToCart = (game: Game) => {
     startTransition(async () => {
+      // Update localStorage
+      const currentCart = getItem() || [];
+      setItem([...currentCart, game]);
+      // Server action
       await addToCart(game);
-
       router.refresh();
     });
   };
 
   const handleRemoveFromCart = (gameId: string) => {
     startTransition(async () => {
+      // Update localStorage
+      const currentCart = getItem() || [];
+      setItem(currentCart.filter((g) => g.id !== gameId));
+      // Server action
       await removeFromCart(gameId);
-
       router.refresh();
     });
   };
+
   return (
     <div className="border rounded-lg p-4 flex flex-col shadow-sm bg-white relative">
       {game.isNew && (

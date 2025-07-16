@@ -1,5 +1,6 @@
-import React, { Suspense } from "react";
-import Link from "next/link";
+'use client'
+import React, { Suspense, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { OrderSummary } from "./OrderSummary";
 import { CartInteractions } from "./CartInteractions";
 import { CartItem as CartItemType } from "../actions/cart";
@@ -14,14 +15,26 @@ export const CartContent: React.FC<CartContentProps> = ({
   cart,
   itemCount,
 }) => {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
+  const handleBack = () => {
+    startTransition(() => {
+      router.push("/");
+    });
+  };
+
   return (
     <>
-      <Link
-        href="/"
-        className="mb-6 flex items-center gap-2 text-gray-700 hover:underline text-sm"
+      <button
+        type="button"
+        className="mb-6 flex items-center gap-2 text-gray-700 hover:underline text-sm disabled:opacity-50"
+        onClick={handleBack}
+        disabled={isPending}
       >
-        <span className="text-lg">&larr;</span> Back to Catalog
-      </Link>
+        <span className="text-lg">&larr;</span>{" "}
+        {isPending ? "Loading..." : "Back to Catalog"}
+      </button>
       <h1 className="text-2xl font-bold mb-2">Your Cart</h1>
       <div className="text-gray-500 mb-6">
         {itemCount} item{itemCount !== 1 ? "s" : ""}
