@@ -3,7 +3,6 @@ import React, { Suspense, useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { OrderSummary } from "./OrderSummary";
 import { CartInteractions } from "./CartInteractions";
-import { CartItem as CartItemType } from "../actions/cart";
 import { LoadingIndicator } from "./LoadingIndicator";
 
 export const CartContent: React.FC = ({}) => {

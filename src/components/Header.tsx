@@ -3,7 +3,10 @@ import React from "react";
 import Link from "next/link";
 
 export const Header: React.FC = () => {
-  const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+  const cart =
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("cart") || "[]")
+      : [];
   const itemCount = cart.length;
 
   return (
