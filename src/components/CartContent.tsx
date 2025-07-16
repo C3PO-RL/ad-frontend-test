@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, { Suspense, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { OrderSummary } from "./OrderSummary";

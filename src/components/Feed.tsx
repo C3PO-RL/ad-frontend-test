@@ -32,16 +32,10 @@ const GENRES = [
 interface FeedProps {
   games: Game[];
   total: number;
-  currentPage: number;
   cartItems: string[];
 }
 
-export const Feed: React.FC<FeedProps> = ({
-  games,
-  total,
-  currentPage,
-  cartItems,
-}) => {
+export const Feed: React.FC<FeedProps> = ({ games, total, cartItems }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
@@ -56,6 +50,7 @@ export const Feed: React.FC<FeedProps> = ({
       router.push(`/?${params.toString()}`);
     });
   };
+
   const handleGenreChange = (newGenre: string) => {
     startTransition(() => {
       const params = new URLSearchParams(searchParams.toString());
@@ -86,7 +81,6 @@ export const Feed: React.FC<FeedProps> = ({
         <GamesList
           games={games}
           total={total}
-          currentPage={currentPage}
           onSeeMore={handleSeeMore}
           cartItems={cartItems}
         />

@@ -16,7 +16,7 @@ export default async function Page({
   const genre = params.genre;
   const page = parseInt(params.page || "1", 10);
 
-  const [{ games, total, currentPage }, { items: cartItems, itemCount }] =
+  const [{ games, total }, { items: cartItems }] =
     await Promise.all([
       fetchGames({
         genre: genre || undefined,
@@ -33,7 +33,6 @@ export default async function Page({
         <Feed
           games={games}
           total={total}
-          currentPage={currentPage}
           cartItems={cartItemIds}
         />
       </Suspense>

@@ -14,10 +14,6 @@ export const GenreFilter: React.FC<GenreFilterProps> = ({
   selected,
   handleGenreChange,
 }) => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [isPending, startTransition] = useTransition();
-
   return (
     <div className="flex items-center gap-2">
       <label htmlFor="genre-select" className="font-semibold">
@@ -28,7 +24,6 @@ export const GenreFilter: React.FC<GenreFilterProps> = ({
         className="border rounded px-3 py-2 text-sm"
         value={selected}
         onChange={(e) => handleGenreChange(e.target.value)}
-        disabled={isPending}
       >
         <option value="">All</option>
         {genres.map((genre) => (

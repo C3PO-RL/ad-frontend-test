@@ -9,15 +9,13 @@ import { addToCart, removeFromCart } from "../actions/cart";
 interface GamesListProps {
   games: Game[];
   total: number;
-  currentPage: number;
   onSeeMore: () => void;
-  cartItems: string[]; // Array of game IDs in cart
+  cartItems: string[];
 }
 
 export const GamesList: React.FC<GamesListProps> = ({
   games,
   total,
-  currentPage,
   onSeeMore,
   cartItems,
 }) => {
